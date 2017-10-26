@@ -2,11 +2,13 @@ package win.arousalzk.hibernate.test;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 
 import win.arousalzk.hibernate.domain.User;
@@ -184,11 +186,83 @@ public class HibernateTest {
     }
     
     
+    /**
+     * 测试用工具类进行删除
+     */
     @Test
     public void testUtilsDelete() {
         HibernateUtils utils = HibernateUtils.getHibernateUtils();
         User user = new User();
         user.setId(2);
         utils.deleteObject(user);
+    }
+    
+    /**
+     * 专门测试通过HQL进行各种查询操作
+     */
+    @Test
+    public void testHQL() {
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        SessionFactory factory = configuration.buildSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        //1. 准备数据
+        /*
+            USE `hibernate`;
+            INSERT INTO userinfo VALUES (1, 'AAAA', 'Anderson');
+            INSERT INTO userinfo VALUES (2, 'BBBB', 'Bill');
+            INSERT INTO userinfo VALUES (3, 'CCCC', 'Candy');
+            INSERT INTO userinfo VALUES (4, 'DDDD', 'Dave');
+         */
+        //2. 普通查询
+        //2.1 查询所有用户
+        /*
+        StringBuilder sb = new StringBuilder();
+        sb.append("from ").append(User.class.getSimpleName());
+        Query query = session.createQuery(sb.toString());
+        @SuppressWarnings("unchecked")
+        List<User> users = query.list();
+        for (User user : users) {
+            System.out.println(user.getUsername());
+        }
+        */
+        // 3. 条件查询
+        /*
+        StringBuilder sb = new StringBuilder();
+        sb.append("from ").append(User.class.getSimpleName()).append(" where username=?");
+        Query query = session.createQuery(sb.toString());
+        query.setParameter(0, "Bill");
+        @SuppressWarnings("unchecked")
+        List<User> users = query.list();
+        for (User user : users) {
+            System.out.println(user.getPassword());
+        }
+         */
+        //4. 原生SQL查询
+        /*
+        String queryString = "select * from userinfo";
+        Query query = session.createSQLQuery(queryString).addEntity(User.class);
+        //q.setParameter(0, "Jack");
+        @SuppressWarnings("unchecked")
+        List<User> users = query.list();
+        for (User user : users) {
+            System.out.println(user.getUsername());
+        }
+        */
+        //5. criteria 查询
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.idEq(1));
+        @SuppressWarnings("unchecked")
+        List<User> list = criteria.list();
+        for (User user : list) {
+            System.out.println(user.getUsername());
+        }
+        
+        session.getTransaction().commit();
+        session.close();
+        factory.close();
+       
+
     }
 }
