@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.junit.Test;
 
 import win.arousalzk.hibernate.domain.User;
+import win.arousalzk.hibernate.utils.HibernateUtils;
 
 /**
  * HibernateTest.java
@@ -148,5 +149,42 @@ public class HibernateTest {
         }
         //提交事务
         session.getTransaction().commit();
+    }
+
+
+    /**
+     * 测试用工具类create
+     */
+    @Test
+    public void testUtilsCreate() {
+        HibernateUtils utils = HibernateUtils.getHibernateUtils();
+        User user = new User();
+        user.setId(2);
+        user.setPassword("password");
+        user.setUsername("Mr.U");
+        utils.addObject(user);
+    }
+    
+    /**
+     * 测试用工具类查找
+     */
+    @Test
+    public void testUtilsRetrieve() {
+        HibernateUtils utils = HibernateUtils.getHibernateUtils();
+        StringBuilder sb = new StringBuilder();
+        sb.append("from ").append(User.class.getName()).append(" where user_id=?");
+        List<Object> users = utils.getObject(sb.toString(), "2");
+        for (Object object : users) {
+            System.out.println(((User) object).getUsername());
+        }
+    }
+    
+    
+    @Test
+    public void testUtilsDelete() {
+        HibernateUtils utils = HibernateUtils.getHibernateUtils();
+        User user = new User();
+        user.setId(2);
+        utils.deleteObject(user);
     }
 }
