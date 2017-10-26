@@ -102,7 +102,9 @@ public class HibernateTest {
         //将名字为Tom的用户的密码改为imcat
         //首先查到叫Tom这位，获取其实体
         StringBuilder sb = new StringBuilder();
-        sb.append("from ").append(User.class.getName()).append(" where user_username=?");
+//        sb.append("from ").append(User.class.getName()).append(" where user_username=?");
+        //EJB形式
+        sb.append("from ").append(User.class.getName()).append(" where username=?");
         Query query = session.createQuery(sb.toString());
         query.setString(0, "Tom");
         //另外一种写法
@@ -139,7 +141,9 @@ public class HibernateTest {
         //获取名字为Tom的用户
         StringBuilder hql = new StringBuilder();
         //注意表中字段不要写错
-        hql.append("from ").append(User.class.getName()).append(" where user_username=?");
+//        hql.append("from ").append(User.class.getName()).append(" where user_username=?");
+        //EJB注入
+        hql.append("from ").append(User.class.getName()).append(" where username=?");
         Query query = session.createQuery(hql.toString());
         query.setString(0, "Tom");
         @SuppressWarnings("unchecked")

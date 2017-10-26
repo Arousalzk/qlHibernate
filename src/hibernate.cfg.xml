@@ -37,7 +37,10 @@
         <property name="hbm2ddl.auto">update</property>         
 
         <!-- 映射文件 -->
+        <!--  
         <mapping resource="win/arousalzk/hibernate/domain/User.hbm.xml"/>
-
+        -->
+        <!-- EJB形式的映射文件直接是实体类 -->
+        <mapping class="win.arousalzk.hibernate.domain.User"/>
     </session-factory>
 </hibernate-configuration>
