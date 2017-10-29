@@ -1,6 +1,8 @@
 package win.arousalzk.hibernate.test;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -11,6 +13,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 
+import win.arousalzk.hibernate.domain.Group;
 import win.arousalzk.hibernate.domain.User;
 import win.arousalzk.hibernate.utils.HibernateUtils;
 
@@ -258,11 +261,57 @@ public class HibernateTest {
         for (User user : list) {
             System.out.println(user.getUsername());
         }
-        
         session.getTransaction().commit();
         session.close();
         factory.close();
        
 
     }
+
+
+    /**
+     * 测试一对多查询
+     */
+    @Test
+    public void testOne2Many() {
+        
+        
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        SessionFactory factory = configuration.buildSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        
+        
+        // 新建一个 LOL 群组
+        Group group = new Group();
+        group.setGroupName("newGroup");
+
+        // 新建两个用户
+        Set<User> users = new HashSet<User>();
+        User user1 = new User();
+        user1.setUsername("newAAA");
+        user1.setPassword("new11AA");
+        User user2 = new User();
+        user2.setUsername("newBBB");
+        user2.setPassword("new222bbb");
+        
+        
+        users.add(user1);
+        users.add(user2);
+        
+        // 保存相关对象
+        for (User user : users) {
+            session.save(user);
+        }
+        group.setUsers(users);
+
+       
+        session.save(group);
+        
+        session.getTransaction().commit();
+        session.close();
+        factory.close();
+    }
+
 }
