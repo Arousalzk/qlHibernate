@@ -283,7 +283,7 @@ public class HibernateTest {
         session.beginTransaction();
         
         
-        // 新建一个 LOL 群组
+        // 新建一个群组
         Group group = new Group();
         group.setGroupName("newGroup");
 
@@ -304,7 +304,7 @@ public class HibernateTest {
         for (User user : users) {
             session.save(user);
         }
-        group.setUsers(users);
+//        group.setUsers(users);
 
        
         session.save(group);
@@ -313,5 +313,43 @@ public class HibernateTest {
         session.close();
         factory.close();
     }
+    /**
+     * 测试多对一查询
+     */
+    @Test
+    public void testMany2One() {
+        
+        
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        SessionFactory factory = configuration.buildSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        
+        
+        // 新建一个群组
+        Group group = new Group();
+        group.setGroupName("Many2One");
 
+        // 新建两个用户
+        User user1 = new User();
+        user1.setUsername("newAAA");
+        user1.setPassword("new11AA");
+        User user2 = new User();
+        user2.setUsername("newBBB");
+        user2.setPassword("new222bbb");
+        user1.setGroup(group);
+        user2.setGroup(group);
+        
+        session.save(user1);
+        
+        session.save(user2);
+
+       
+        session.save(group);
+        
+        session.getTransaction().commit();
+        session.close();
+        factory.close();
+    }
 }

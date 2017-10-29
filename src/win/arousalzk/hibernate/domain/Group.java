@@ -1,22 +1,17 @@
 package win.arousalzk.hibernate.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="group_table")//对应表名
 /**
  * Group.java
- * 群组
+ * 群组x
  * @author Arousalzk
  * @date 2017-10-26
  * @version 1.0
@@ -32,9 +27,9 @@ public class Group {
     /**对应列名*/
     private String groupName;
     
-    @OneToMany(targetEntity=User.class)
-    @JoinColumn(name="group_id") 
-    private Set<User> users = new HashSet<User>();
+//    @OneToMany(targetEntity=User.class)
+//    @JoinColumn(name="group_id") 
+//    private Set<User> users = new HashSet<User>();
     
     
     public int getId() {
@@ -54,12 +49,13 @@ public class Group {
     }
 
     
-    @OneToMany(mappedBy="user")
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+//    @OneToMany(mappedBy="user")
+    /**此处不一定一定要加，测试不加好像没问题*/
+//    public Set<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
 }
