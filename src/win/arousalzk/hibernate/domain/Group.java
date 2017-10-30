@@ -3,9 +3,10 @@ package win.arousalzk.hibernate.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="group_table")//对应表名
@@ -20,7 +21,8 @@ public class Group {
     
     @Id//主键
     @Column(name="group_id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private int id;
     
     @Column(name="group_name")

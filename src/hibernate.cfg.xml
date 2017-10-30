@@ -43,5 +43,7 @@
         <!-- EJB形式的映射文件直接是实体类 -->
         <mapping class="win.arousalzk.hibernate.domain.User"/>
         <mapping class="win.arousalzk.hibernate.domain.Group"/>
+        <mapping class="win.arousalzk.hibernate.domain.Student"/>
+        <mapping class="win.arousalzk.hibernate.domain.Course"/>
     </session-factory>
 </hibernate-configuration>

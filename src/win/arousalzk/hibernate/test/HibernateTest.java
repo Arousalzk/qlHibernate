@@ -13,7 +13,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 
+import win.arousalzk.hibernate.domain.Course;
 import win.arousalzk.hibernate.domain.Group;
+import win.arousalzk.hibernate.domain.Student;
 import win.arousalzk.hibernate.domain.User;
 import win.arousalzk.hibernate.utils.HibernateUtils;
 
@@ -329,15 +331,15 @@ public class HibernateTest {
         
         // 新建一个群组
         Group group = new Group();
-        group.setGroupName("Many2One");
+        group.setGroupName("AlexBob2");
 
         // 新建两个用户
         User user1 = new User();
-        user1.setUsername("newAAA");
-        user1.setPassword("new11AA");
+        user1.setUsername("Alex2");
+        user1.setPassword("Alexppp2");
         User user2 = new User();
-        user2.setUsername("newBBB");
-        user2.setPassword("new222bbb");
+        user2.setUsername("Bob2");
+        user2.setPassword("Bobppp2");
         user1.setGroup(group);
         user2.setGroup(group);
         
@@ -347,6 +349,59 @@ public class HibernateTest {
 
        
         session.save(group);
+        
+        session.getTransaction().commit();
+        session.close();
+        factory.close();
+    }
+    
+    /**
+     * 测试多对多
+     */
+    @Test
+    public void testMany2Many() {
+        
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        SessionFactory factory = configuration.buildSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        
+        // 新建三门课程
+        Set<Course> courses = new HashSet<Course>();
+        Course c1 = new Course();
+        c1.setName("Chinese");
+        Course c2 = new Course();
+        c2.setName("English");
+        Course c3 = new Course();
+        c3.setName("Math");
+        courses.add(c1);
+        courses.add(c2);
+        courses.add(c3);
+
+        // 新建三个学生
+        Set<Student> students = new HashSet<Student>();
+        Student s1 = new Student();
+        s1.setName("Michael");
+        Student s2 = new Student();
+        s2.setName("KangKang");
+        Student s3 = new Student();
+        s3.setName("Jane");
+        students.add(s1);
+        students.add(s2);
+        students.add(s3);
+
+        // 将三个学生都关联到每一门课程中
+        c1.setStudents(students);
+        c2.setStudents(students);
+        c3.setStudents(students);
+
+        // 保存相关对象
+        session.save(c1);
+        session.save(c2);
+        session.save(c3);
+        
+        
         
         session.getTransaction().commit();
         session.close();
